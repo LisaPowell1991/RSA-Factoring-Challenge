@@ -13,7 +13,7 @@ void factorize(int number)
 	{
 		while (number % i == 0)
 		{
-			printf("%d=%d*%d\n", number, i, number / i);
+			printf("%d=%d*%d\n", number, number / i, i);
 			return;
 		}
 	}
