@@ -11,10 +11,10 @@ void factorize(int number)
 
 	for (i = 2; i <= number; i++)
 	{
-		while (number % i == 0)
+		if (number % i == 0)
 		{
-			printf("%d=%d*%d\n", number, i, number / i);
-			return;
+			printf("%d=%d*%d\n", number, number / i, i);
+			break;
 		}
 	}
 }
@@ -28,29 +28,31 @@ void factorize(int number)
  */
 int main(int argc, char *argv[])
 {
-	char line[20];
+	ssize_t line;
+	size_t count;
+	char *buf;
 	int number;
 	FILE *file;
 
 	if (argc != 2)
 	{
 		printf("Usage: %s <file>\n", argv[0]);
-		return (1);
+		exit(EXIT_FAILURE);
 	}
 
 	file = fopen(argv[1], "r");
 	if (file == NULL)
 	{
-		perror("Error opening file");
-		return (1);
+		fprintf(stderr, "Error: can't open file %s\n", argv[1]);
+		exit(EXIT_FAILURE);
 	}
 
-	while (fgets(line, sizeof(line), file))
+	while ((line = getline(&buf, &count, file)) != - 1)
 	{
-		number = atoi(line);
+		number = atoi(buf);
 		factorize(number);
 	}
-
+	free(buf);
 	fclose(file);
 	return (0);
 }
